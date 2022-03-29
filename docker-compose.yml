@@ -9,7 +9,7 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - ./project/:/var/www/html/
+      - ./:/var/www/html/
 
   db: 
     image: mysql
