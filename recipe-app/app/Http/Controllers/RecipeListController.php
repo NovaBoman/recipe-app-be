@@ -26,6 +26,12 @@ class RecipeListController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'title' => 'required|string',
+            'user_id' => 'required|integer',
+        ]);
+
+        return RecipeList::create($request->all());
     }
 
     /**
