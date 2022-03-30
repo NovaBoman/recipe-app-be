@@ -15,7 +15,10 @@ return new class extends Migration
     {
         Schema::create('list_entries', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('recipe_list_id')
+                ->constrained()
+                ->cascadeOnDelete();
+            $table->integer('recipe_id')->cascadeOnDelete();
         });
     }
 
