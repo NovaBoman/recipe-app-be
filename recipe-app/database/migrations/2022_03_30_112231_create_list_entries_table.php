@@ -19,6 +19,7 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
             $table->integer('recipe_id')->cascadeOnDelete();
+            $table->timestamps();
         });
     }
 
