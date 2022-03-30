@@ -40,9 +40,9 @@ class RecipeListController extends Controller
      * @param  \App\Models\RecipeList  $recipeList
      * @return \Illuminate\Http\Response
      */
-    public function show(RecipeList $recipeList)
+    public function show($id)
     {
-        //
+        return RecipeList::find($id);
     }
 
     /**
