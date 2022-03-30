@@ -52,9 +52,13 @@ class RecipeListController extends Controller
      * @param  \App\Models\RecipeList  $recipeList
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, RecipeList $recipeList)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'title' => 'required|string'
+        ]);
+        RecipeList::find($id)->update($request->all());
+        return RecipeList::find($id);
     }
 
     /**
