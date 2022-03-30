@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\RecipeList;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RecipeListController extends Controller
 {
@@ -14,7 +15,7 @@ class RecipeListController extends Controller
      */
     public function index()
     {
-        //
+        return RecipeList::where('user_id', 1)->get();
     }
 
     /**
@@ -25,7 +26,6 @@ class RecipeListController extends Controller
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**
