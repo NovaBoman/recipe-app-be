@@ -67,8 +67,8 @@ class RecipeListController extends Controller
      * @param  \App\Models\RecipeList  $recipeList
      * @return \Illuminate\Http\Response
      */
-    public function destroy(RecipeList $recipeList)
+    public function destroy($id)
     {
-        //
+        return RecipeList::destroy($id);
     }
 }

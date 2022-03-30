@@ -23,3 +23,4 @@ Route::get('/lists', [RecipeListController::class, 'index']);
 Route::get('/lists/{id}', [RecipeListController::class, 'show']);
 Route::post('/lists', [RecipeListController::class, 'store']);
 Route::put('/lists/{id}/update', [RecipeListController::class, 'update']);
+Route::delete('/lists/{id}/delete', [RecipeListController::class, 'destroy']);
