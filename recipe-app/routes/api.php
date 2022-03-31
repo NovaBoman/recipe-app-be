@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ListEntryController;
 use App\Http\Controllers\RecipeListController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,3 +25,8 @@ Route::get('/lists/{id}', [RecipeListController::class, 'show']);
 Route::post('/lists', [RecipeListController::class, 'store']);
 Route::put('/lists/{id}/update', [RecipeListController::class, 'update']);
 Route::delete('/lists/{id}/delete', [RecipeListController::class, 'destroy']);
+
+
+// List entries
+
+Route::post('/lists/{id}/entry', [ListEntryController::class, 'store']);
