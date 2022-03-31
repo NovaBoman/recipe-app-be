@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\RecipeList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class RecipeListController extends Controller
 {
@@ -26,10 +28,26 @@ class RecipeListController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string',
-            'user_id' => 'required|integer',
-        ]);
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'user_id' => 'required|integer',
+                'title' => [
+                    'required',
+                    'string',
+                    Rule::unique('recipe_lists')->where('user_id', $request->user_id)
+                ]
+
+            ],
+            [
+                'unique' => 'List with this name already exists'
+            ]
+        );
+
+        if ($validator->fails()) {
+            return $validator->errors()->all();
+        }
 
         return RecipeList::create($request->all());
     }
@@ -54,10 +72,27 @@ class RecipeListController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'title' => 'required|string'
-        ]);
-        RecipeList::find($id)->update($request->all());
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'user_id' => 'required|integer',
+                'title' => [
+                    'required',
+                    'string',
+                    Rule::unique('recipe_lists')->where('user_id', $request->user_id)
+                ]
+
+            ],
+            [
+                'unique' => 'List with this name already exists'
+            ]
+        );
+
+        if ($validator->fails()) {
+            return $validator->errors()->all();
+        }
+
+        RecipeList::find($id)->update(['title' => $request->title]);
         return RecipeList::find($id);
     }
 
