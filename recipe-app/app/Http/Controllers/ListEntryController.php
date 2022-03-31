@@ -78,8 +78,9 @@ class ListEntryController extends Controller
      * @param  \App\Models\ListEntry  $listEntry
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ListEntry $listEntry)
+    public function destroy($id)
     {
-        //
+        ListEntry::destroy($id);
+        return ['message' => 'Entry deleted'];
     }
 }
