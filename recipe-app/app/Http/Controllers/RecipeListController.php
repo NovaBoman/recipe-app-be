@@ -104,6 +104,7 @@ class RecipeListController extends Controller
      */
     public function destroy($id)
     {
-        return RecipeList::destroy($id);
+        RecipeList::destroy($id);
+        return ['message' => 'List deleted'];
     }
 }
