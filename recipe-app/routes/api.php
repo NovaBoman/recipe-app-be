@@ -20,6 +20,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// User routes
+
+
+
+// Recipe lists
+
 Route::get('/lists', [RecipeListController::class, 'index']);
 Route::get('/lists/{id}', [RecipeListController::class, 'show']);
 Route::post('/lists', [RecipeListController::class, 'store']);
