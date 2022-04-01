@@ -17,7 +17,7 @@ class RecipeListController extends Controller
      */
     public function index()
     {
-        return RecipeList::where('user_id', 1)->get();
+        return RecipeList::where('user_id', 2)->get();
     }
 
     /**
