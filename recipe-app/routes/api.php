@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ListEntryController;
 use App\Http\Controllers\RecipeListController;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // User routes
 
-
+Route::post('/register', [AuthController::class, 'register']);
 
 // Recipe lists
 
