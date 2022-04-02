@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -29,6 +30,11 @@ class AuthController extends Controller
             return $validator->errors()->all();
         }
 
-        return User::create($request->all());
+        $user = User::create([
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' => Hash::make($request->password)
+        ]);
+        return $user;
     }
 }
