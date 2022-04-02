@@ -35,6 +35,9 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
-        return $user;
+
+        $token = $user->createToken('api_token');
+
+        return ['user' => $user, 'token' => $token->plainTextToken];
     }
 }
