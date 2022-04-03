@@ -22,20 +22,26 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // User routes
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// Recipe lists
-
-Route::get('/lists', [RecipeListController::class, 'index']);
-Route::get('/lists/{id}', [RecipeListController::class, 'show']);
-Route::post('/lists', [RecipeListController::class, 'store']);
-Route::put('/lists/{id}/update', [RecipeListController::class, 'update']);
-Route::delete('/lists/{id}/delete', [RecipeListController::class, 'destroy']);
 
 
-// List entries
+Route::middleware(['auth:sanctum'])->group(
+    function () {
 
-Route::post('/lists/{id}/entry', [ListEntryController::class, 'store']);
-Route::delete('/entry/{id}/delete', [ListEntryController::class, 'destroy']);
+        // User routes
+        Route::post('/logout', [AuthController::class, 'logout']);
+
+        // Recipe lists
+        Route::get('/lists', [RecipeListController::class, 'index']);
+        Route::get('/lists/{id}', [RecipeListController::class, 'show']);
+        Route::post('/lists', [RecipeListController::class, 'store']);
+        Route::put('/lists/{id}/update', [RecipeListController::class, 'update']);
+        Route::delete('/lists/{id}/delete', [RecipeListController::class, 'destroy']);
+
+        // List entries
+        Route::post('/lists/{id}/entry', [ListEntryController::class, 'store']);
+        Route::delete('/entry/{id}/delete', [ListEntryController::class, 'destroy']);
+    }
+);
