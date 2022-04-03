@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+
 
     public function register(Request $request)
     {
@@ -36,8 +38,30 @@ class AuthController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
-        $token = $user->createToken('api_token');
+        return ['user' => $user];
+    }
 
-        return ['user' => $user, 'token' => $token->plainTextToken];
+    public function login(Request $request)
+    {
+        $request->validate([
+            'username' => 'required|string',
+            'password' => 'required|string'
+        ]);
+
+        //Check if user exists
+        $user = User::where('username', $request->username)->first();
+        if (!$user) {
+            return ["message" => "Username does not exist"];
+        }
+
+        //Check if password is correct
+        if (!Hash::check($request->password, $user->password)) {
+            return ["message" => "Incorrect password"];
+        }
+
+        //Create token
+        $token = $user->createToken('api_token')->plainTextToken;
+
+        return ['user' => $user, 'token' => $token];
     }
 }
