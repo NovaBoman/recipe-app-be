@@ -17,7 +17,7 @@ class RecipeListController extends Controller
      */
     public function index()
     {
-        return RecipeList::where('user_id', Auth::id())->get();
+        return RecipeList::where('user_id', Auth::id())->with('ListEntries')->get();
     }
 
     /**
@@ -62,14 +62,10 @@ class RecipeListController extends Controller
      */
     public function show($id)
     {
-        $list = RecipeList::find($id);
+        $list = RecipeList::where('user_id', Auth::id())->with('ListEntries')->find($id);
 
         if (!$list) {
             return ['message' => 'No list with this ID'];
-        }
-
-        if ($list->user_id !== Auth::id()) {
-            return ['message' => 'User has no list with this ID'];
         }
 
         return $list;
@@ -84,8 +80,15 @@ class RecipeListController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        $list = RecipeList::where('user_id', Auth::id())->find($id);
+
+        if (!$list) {
+            return ['message' => 'No list with this ID'];
+        }
+
         $validator = Validator::make(
-            $request->title,
+            $request->all(),
             [
                 'title' => [
                     'required',
@@ -103,16 +106,6 @@ class RecipeListController extends Controller
             return $validator->errors()->all();
         }
 
-        $list = RecipeList::find($id);
-
-        if (!$list) {
-            return ['message' => 'No list with this ID'];
-        }
-
-        if ($list->user_id !== Auth::id()) {
-            return ['message' => 'User has no list with this ID'];
-        }
-
         $list->update(['title' => $request->title]);
         return $list;
     }
@@ -125,15 +118,12 @@ class RecipeListController extends Controller
      */
     public function destroy($id)
     {
-        $list = RecipeList::find($id);
+        $list = RecipeList::where('user_id', Auth::id())->find($id);
 
         if (!$list) {
             return ['message' => 'No list with this ID'];
         }
 
-        if ($list->user_id !== Auth::id()) {
-            return ['message' => 'User has no list with this ID'];
-        }
         $list->destroy();
         return ['message' => 'List deleted'];
     }
