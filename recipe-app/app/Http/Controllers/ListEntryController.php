@@ -21,7 +21,7 @@ class ListEntryController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'recipe_list_id' => 'required',
+                'recipe_list_id' => 'required|exists:recipe_lists,id',
                 'recipe_id' => [
                     'required',
                     Rule::unique('list_entries')->where('recipe_list_id', $request->recipe_list_id)
@@ -29,7 +29,8 @@ class ListEntryController extends Controller
 
             ],
             [
-                'unique' => 'Recipe has already been added to list'
+                'unique' => 'Recipe has already been added to list',
+                'exists' => 'No recipe list with this ID'
             ]
         );
 
