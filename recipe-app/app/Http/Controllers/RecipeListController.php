@@ -17,7 +17,7 @@ class RecipeListController extends Controller
      */
     public function index()
     {
-        return RecipeList::where('user_id', 2)->get();
+        return RecipeList::where('user_id', Auth::id())->get();
     }
 
     /**
@@ -32,11 +32,10 @@ class RecipeListController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'user_id' => 'required|integer',
                 'title' => [
                     'required',
                     'string',
-                    Rule::unique('recipe_lists')->where('user_id', $request->user_id)
+                    Rule::unique('recipe_lists')->where('user_id', Auth::id())
                 ]
 
             ],
@@ -49,7 +48,10 @@ class RecipeListController extends Controller
             return $validator->errors()->all();
         }
 
-        return RecipeList::create($request->all());
+        return RecipeList::create([
+            'title' => $request->title,
+            'user_id' => Auth::id()
+        ]);
     }
 
     /**
@@ -60,7 +62,17 @@ class RecipeListController extends Controller
      */
     public function show($id)
     {
-        return RecipeList::find($id);
+        $list = RecipeList::find($id);
+
+        if (!$list) {
+            return ['message' => 'No list with this ID'];
+        }
+
+        if ($list->user_id !== Auth::id()) {
+            return ['message' => 'User has no list with this ID'];
+        }
+
+        return $list;
     }
 
     /**
@@ -73,13 +85,12 @@ class RecipeListController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make(
-            $request->all(),
+            $request->title,
             [
-                'user_id' => 'required|integer',
                 'title' => [
                     'required',
                     'string',
-                    Rule::unique('recipe_lists')->where('user_id', $request->user_id)
+                    Rule::unique('recipe_lists')->where('user_id', Auth::id())
                 ]
 
             ],
@@ -92,8 +103,18 @@ class RecipeListController extends Controller
             return $validator->errors()->all();
         }
 
-        RecipeList::find($id)->update(['title' => $request->title]);
-        return RecipeList::find($id);
+        $list = RecipeList::find($id);
+
+        if (!$list) {
+            return ['message' => 'No list with this ID'];
+        }
+
+        if ($list->user_id !== Auth::id()) {
+            return ['message' => 'User has no list with this ID'];
+        }
+
+        $list->update(['title' => $request->title]);
+        return $list;
     }
 
     /**
@@ -104,7 +125,16 @@ class RecipeListController extends Controller
      */
     public function destroy($id)
     {
-        RecipeList::destroy($id);
+        $list = RecipeList::find($id);
+
+        if (!$list) {
+            return ['message' => 'No list with this ID'];
+        }
+
+        if ($list->user_id !== Auth::id()) {
+            return ['message' => 'User has no list with this ID'];
+        }
+        $list->destroy();
         return ['message' => 'List deleted'];
     }
 }
