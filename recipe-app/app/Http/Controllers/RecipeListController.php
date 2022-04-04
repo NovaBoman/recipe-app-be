@@ -124,7 +124,7 @@ class RecipeListController extends Controller
             return ['message' => 'No list with this ID'];
         }
 
-        $list->destroy();
+        $list->delete();
         return ['message' => 'List deleted'];
     }
 }
