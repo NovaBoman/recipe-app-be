@@ -38,7 +38,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
-        return ['user' => $user];
+        return $user;
     }
 
     public function login(Request $request)
@@ -51,23 +51,23 @@ class AuthController extends Controller
         //Check if user exists
         $user = User::where('username', $request->username)->first();
         if (!$user) {
-            return ["message" => "Username does not exist"];
+            return ['message' => 'Username does not exist'];
         }
 
         //Check if password is correct
         if (!Hash::check($request->password, $user->password)) {
-            return ["message" => "Incorrect password"];
+            return ['message' => 'Incorrect password'];
         }
 
         //Create token
         $token = $user->createToken('api_token')->plainTextToken;
 
-        return ['user' => $user, 'token' => $token];
+        return [$user, 'token' => $token];
     }
 
     public function logout()
     {
         Auth::user()->tokens()->delete();
-        return ['message' => 'logged out ' . Auth::user()->username];
+        return ['message' => 'logged out '];
     }
 }
