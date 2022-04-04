@@ -43,16 +43,24 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
-            'username' => 'required|string',
-            'password' => 'required|string'
-        ]);
 
-        //Check if user exists
-        $user = User::where('username', $request->username)->first();
-        if (!$user) {
-            return ['message' => 'Username does not exist'];
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'username' => 'required|string|exists:users',
+                'password' => 'required|string'
+            ],
+            [
+                'exists' => 'Username does not exist',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return $validator->errors()->all();
         }
+
+
+        $user = User::where('username', $request->username)->first();
 
         //Check if password is correct
         if (!Hash::check($request->password, $user->password)) {
