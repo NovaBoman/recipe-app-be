@@ -19,12 +19,12 @@ class AuthController extends Controller
             $request->all(),
             [
                 'username' => 'required|string|max:20|unique:users,username',
-                'email' => 'required|string|unique:users,email',
-                'password' => 'required||string|'
+                'email' => 'required|string|unique:users,email|email',
+                'password' => 'required||string|confirmed'
             ],
             [
                 'username.unique' => 'A user with this username already exists',
-                'email.unique' => 'This email is already being used'
+                'email.unique' => 'This email is already being used',
             ]
         );
 
