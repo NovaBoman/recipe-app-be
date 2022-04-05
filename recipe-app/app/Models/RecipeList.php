@@ -11,6 +11,11 @@ class RecipeList extends Model
         'user_id',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function listEntries()
     {
         return $this->hasMany(ListEntry::class);

@@ -10,4 +10,9 @@ class ListEntry extends Model
         'recipe_list_id',
         'recipe_id',
     ];
+
+    public function recipeList()
+    {
+        return $this->belongsTo(RecipeList::class);
+    }
 }
