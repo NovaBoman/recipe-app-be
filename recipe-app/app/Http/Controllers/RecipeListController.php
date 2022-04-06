@@ -45,13 +45,12 @@ class RecipeListController extends Controller
         );
 
         if ($validator->fails()) {
-            return $validator->errors()->all();
+            $errors = $validator->errors()->all();
+            return response()->json(['message' => $errors], 422);
         }
 
-        return RecipeList::create([
-            'title' => $request->title,
-            'user_id' => Auth::id()
-        ]);
+        $list = RecipeList::create(['title' => $request->title, 'user_id' => Auth::id()]);
+        return response()->json(['message' => 'List created', $list], 200);
     }
 
     /**
@@ -65,10 +64,10 @@ class RecipeListController extends Controller
         $list = RecipeList::where('user_id', Auth::id())->with('ListEntries')->find($id);
 
         if (!$list) {
-            return ['message' => 'No list with this ID'];
+            return response()->json(['message' => 'No list with this ID'], 404);
         }
 
-        return $list;
+        return response()->json($list, 200);
     }
 
     /**
@@ -84,7 +83,7 @@ class RecipeListController extends Controller
         $list = RecipeList::where('user_id', Auth::id())->find($id);
 
         if (!$list) {
-            return ['message' => 'No list with this ID'];
+            return response()->json(['message' => 'No list with this ID'], 404);
         }
 
         $validator = Validator::make(
@@ -103,11 +102,12 @@ class RecipeListController extends Controller
         );
 
         if ($validator->fails()) {
-            return $validator->errors()->all();
+            $errors = $validator->errors()->all();
+            return response()->json(['message' => $errors], 422);
         }
 
         $list->update(['title' => $request->title]);
-        return $list;
+        return response()->json(['message' => 'List title updated', $list], 200);
     }
 
     /**
@@ -121,10 +121,10 @@ class RecipeListController extends Controller
         $list = RecipeList::where('user_id', Auth::id())->find($id);
 
         if (!$list) {
-            return ['message' => 'No list with this ID'];
+            return response()->json(['message' => 'No list with this ID'], 404);
         }
 
         $list->delete();
-        return ['message' => 'List deleted'];
+        return response()->json(['message' => 'List deleted'], 200);
     }
 }

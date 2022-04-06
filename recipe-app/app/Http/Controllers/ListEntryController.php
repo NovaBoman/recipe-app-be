@@ -40,10 +40,11 @@ class ListEntryController extends Controller
         );
 
         if ($validator->fails()) {
-            return $validator->errors()->all();
+            $errors = $validator->errors()->all();
+            return response()->json(['message' => $errors], 400);
         }
-
-        return ListEntry::create($request->all());
+        ListEntry::create($request->all());
+        return response()->json(['message' => 'Added to list'], 201);
     }
 
     /**
@@ -56,9 +57,9 @@ class ListEntryController extends Controller
     {
         $entry = ListEntry::find($id);
         if (!$entry || $entry->recipeList->user->id !== Auth::id()) {
-            return ['message' => 'No entry with this ID'];
+            return response()->json(['message' => 'No entry with this ID'], 404);
         }
         $entry->delete();
-        return ['message' => 'Entry deleted'];
+        return response()->json(['message' => 'Entry deleted'], 200);
     }
 }

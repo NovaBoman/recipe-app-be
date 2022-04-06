@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -29,7 +30,8 @@ class AuthController extends Controller
         );
 
         if ($validator->fails()) {
-            return $validator->errors()->all();
+            $errors = $validator->errors()->all();
+            return response()->json(['message' => $errors], 422);
         }
 
         $user = User::create([
@@ -37,8 +39,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
-
-        return $user;
+        return response()->json(['message' => 'User created', $user], 201);
     }
 
     public function login(Request $request)
@@ -56,7 +57,8 @@ class AuthController extends Controller
         );
 
         if ($validator->fails()) {
-            return $validator->errors()->all();
+            $errors = $validator->errors()->all();
+            return response()->json(['message' => $errors], 401);
         }
 
 
@@ -64,18 +66,18 @@ class AuthController extends Controller
 
         //Check if password is correct
         if (!Hash::check($request->password, $user->password)) {
-            return ['message' => 'Incorrect password'];
+            return response()->json(['message' => 'Incorrect password'], 401);
         }
 
         //Create token
         $token = $user->createToken('api_token')->plainTextToken;
 
-        return [$user, 'token' => $token];
+        return response()->json(['user' => $user, 'token' => $token], 200);
     }
 
     public function logout()
     {
         Auth::user()->tokens()->delete();
-        return ['message' => 'logged out '];
+        return response()->json(['message' => 'Logged out'], 200);
     }
 }
