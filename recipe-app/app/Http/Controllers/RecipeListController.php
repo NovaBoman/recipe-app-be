@@ -17,7 +17,7 @@ class RecipeListController extends Controller
      */
     public function index()
     {
-        return RecipeList::where('user_id', Auth::id())->with('ListEntries')->get();
+        return response(RecipeList::where('user_id', Auth::id())->with('ListEntries')->get(), 200);
     }
 
     /**
