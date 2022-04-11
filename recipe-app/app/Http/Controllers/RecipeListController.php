@@ -50,7 +50,7 @@ class RecipeListController extends Controller
         }
 
         $list = RecipeList::create(['title' => $request->title, 'user_id' => Auth::id()]);
-        return response()->json(['message' => 'List created', $list], 200);
+        return response()->json(['message' => 'List created', 'list' => $list], 200);
     }
 
     /**
