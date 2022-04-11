@@ -41,7 +41,7 @@ Route::middleware(['auth:sanctum'])->group(
         Route::delete('/lists/{id}/delete', [RecipeListController::class, 'destroy']);
 
         // List entries
-        Route::post('/lists/{id}/entry', [ListEntryController::class, 'store']);
+        Route::post('/lists/entry', [ListEntryController::class, 'store']);
         Route::delete('/entry/{id}/delete', [ListEntryController::class, 'destroy']);
     }
 );
